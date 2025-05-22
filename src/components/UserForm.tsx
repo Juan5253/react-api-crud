@@ -36,7 +36,9 @@ export const UserForm: React.FC<Props> = ({ onSave, onCancel, userToEdit }) => {
     }
   }, [userToEdit]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
@@ -51,6 +53,18 @@ export const UserForm: React.FC<Props> = ({ onSave, onCancel, userToEdit }) => {
   return (
     <form onSubmit={handleSubmit} className="mb-4">
       <div className="mb-2">
+        {userToEdit && userToEdit.id && (
+          <div className="mb-2">
+            <label className="form-label">ID</label>
+            <input
+              type="text"
+              className="form-control"
+              value={userToEdit.id}
+              disabled
+              readOnly 
+            />
+          </div>
+        )}
         <label className="form-label">Título</label>
         <select
           name="title"
@@ -147,8 +161,12 @@ export const UserForm: React.FC<Props> = ({ onSave, onCancel, userToEdit }) => {
           required
         />
       </div>
-      <button type="submit" className="btn btn-success me-2">Guardar</button>
-      <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancelar</button>
+      <button type="submit" className="btn btn-success me-2">
+        Guardar
+      </button>
+      <button type="button" className="btn btn-secondary" onClick={onCancel}>
+        Cancelar
+      </button>
     </form>
   );
 };

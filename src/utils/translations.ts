@@ -1,14 +1,15 @@
 export const translateTitle = (title: string, lastName: string): string => {
+  const cleanTitle = title.replace(".","").toLowerCase();
   // Caso especial: Ms. Andersen
-  if (title.toLowerCase() === "ms" && lastName === "Andersen") {
+  if (cleanTitle === "ms" && lastName === "Andersen") {
     return "Srta. Andersen";
   }
   const titles: Record<string, string> = {
-    Mr: "Sr.",
-    Ms: "Sra.",
+    mr: "Sr.",
+    ms: "Sra.",
     miss: "Srta.",
-    Mrs: "Sra.",
+    mrs: "Sra.",
     dr: "Dr.",
   };
-  return `${titles[title.toLowerCase()] || title} ${lastName};`
+  return `${titles[cleanTitle] || title} ${lastName}`;
 };
