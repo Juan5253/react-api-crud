@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { User } from "./models/User";
-import { getUsers, deleteUser, getUserById, createUser, updateUser } from "./api/userApi";
+import {
+  getUsers,
+  deleteUser,
+  getUserById,
+  createUser,
+  updateUser,
+} from "./api/userApi";
 import { UserGrid } from "./components/UserGrid";
 import { UserDetailModal } from "./components/UserDetailModal";
 import { ConfirmDeleteModal } from "./components/ConfirmDeleteModal";
-import { UserForm } from "./components/UserForm";
+import { UserFormModal } from "./components/UserFormModal";
 
 const App: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -85,26 +91,33 @@ const App: React.FC = () => {
   return (
     <div className="container py-4">
       <h1>Gestión de Usuarios</h1>
-      <div className="mb-3">
-        <button className="btn btn-success" onClick={handleCreate}>Crear Usuario</button>
-      </div>
-      <div className="mb-3">
+
+      <div className="mb-3 d-flex justify-content-between align-items-center">
+        <button className="btn btn-success" onClick={handleCreate}>
+          Crear Usuario
+        </button>
         <strong>Total usuarios: {users.length}</strong>
       </div>
-      {showUserForm && (
-        <UserForm
-          onSave={handleSaveUser}
-          onCancel={() => setShowUserForm(false)}
-          userToEdit={userToEdit}
-        />
-      )}
+
+      <UserFormModal
+        visible={showUserForm}
+        userToEdit={userToEdit}
+        onSave={handleSaveUser}
+        onCancel={() => setShowUserForm(false)}
+      />
+
       <UserGrid
         users={users}
         onView={handleView}
         onDelete={handleDelete}
         onEdit={handleEdit}
       />
-      <UserDetailModal user={selectedUser} onClose={() => setSelectedUser(null)} />
+
+      <UserDetailModal
+        user={selectedUser}
+        onClose={() => setSelectedUser(null)}
+      />
+
       <ConfirmDeleteModal
         visible={showDeleteModal}
         onConfirm={confirmDelete}

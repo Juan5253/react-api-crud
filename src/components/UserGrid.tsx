@@ -15,15 +15,16 @@ export const UserGrid: React.FC<UserGridProps> = ({
   onDelete,
   onEdit,
 }) => {
-  const [searchId, setSearchId] = useState<string>("");
+  const [searchId, setSearchId] = useState("");
 
   const filteredUsers = searchId
     ? users.filter((user) =>
         user.id.toLowerCase().includes(searchId.toLowerCase())
       )
     : users;
+
   return (
-    <div>
+    <section>
       <div className="mb-3">
         <input
           type="text"
@@ -31,62 +32,76 @@ export const UserGrid: React.FC<UserGridProps> = ({
           placeholder="Buscar por ID de usuario"
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
+          aria-label="Buscar usuario por ID"
         />
       </div>
 
       <div className="table-responsive">
-        <table className="table table-striped">
-          <thead>
+        <table className="table table-hover align-middle">
+          <thead className="table-light">
             <tr>
-              <th>Id</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Acciones</th>
+              <th scope="col">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Email</th>
+              <th scope="col" className="text-center">
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>
-                  {translateTitle(user.title, user.lastName)} {user.firstName}
-                </td>
-                <td>{user.email}</td>
-                <td>
-                  <button
-                    className="btn btn-info btn-sm mx-1"
-                    onClick={() => onView(user.id)}
-                  >
-                    Ver
-                  </button>
-                  <button
-                    className="btn btn-primary btn-sm mx-1"
-                    onClick={() => onEdit(user.id)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="btn btn-danger btn-sm mx-1"
-                    onClick={() => onDelete(user.id)}
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {filteredUsers.length === 0 && (
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.id}</td>
+                  <td>
+                    {translateTitle(user.title, user.lastName)} {user.firstName}
+                  </td>
+                  <td>{user.email}</td>
+                  <td className="text-center">
+                    <div
+                      className="btn-group"
+                      role="group"
+                      aria-label="Acciones de usuario"
+                    >
+                      <button
+                        className="btn btn-outline-info btn-sm"
+                        onClick={() => onView(user.id)}
+                        title="Ver"
+                      >
+                        <i className="bi bi-eye"></i>
+                      </button>
+                      <button
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() => onEdit(user.id)}
+                        title="Editar"
+                      >
+                        <i className="bi bi-pencil"></i>
+                      </button>
+                      <button
+                        className="btn btn-outline-danger btn-sm"
+                        onClick={() => onDelete(user.id)}
+                        title="Eliminar"
+                      >
+                        <i className="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
               <tr>
-                <td colSpan={4} className="text-center">
+                <td colSpan={4} className="text-center text-muted">
                   No se encontraron usuarios con ese ID.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-        <div>
-          <span>Total usuarios: {filteredUsers.length}</span>
-        </div>
       </div>
-    </div>
+
+      <div className="mt-2 text-end text-muted">
+        Total usuarios: {filteredUsers.length}
+      </div>
+    </section>
   );
 };
